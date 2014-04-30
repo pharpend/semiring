@@ -1,0 +1,4 @@
+dist/
+*~
+.changelog.md
+README.md
