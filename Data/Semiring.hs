@@ -1,24 +1,13 @@
-{-# LANGUAGE GeneralizedNewtypeDeriving #-}
-
 -- | 
 -- Module      : Data.Semiring
 -- Copyright   : Thomas Wilke, Frank Huch, Sebastian Fischer, Peter Harpending
 -- License     : BSD3
 -- Maintainer  : Peter Harpending <pharpend2@gmail.com>
 -- 
--- This library provides a type class for semirings and instances for
--- standard data types.
+-- This library provides a type class for semirings.
 -- 
-module Data.Semiring (
 
-  Semiring(..), fromBool,
-
-  Numeric(..)
-
-  ) where
-
-infixr 6 .+.
-infixr 7 .*.
+module Data.Semiring where
 
 -- |
 -- A semiring is an additive commutative monoid with identity 'zero':
@@ -56,30 +45,6 @@ infixr 7 .*.
 -- 
 --  * @False@ annihilates the Booleans with respect to conjunction.
 -- 
-class Eq s => Semiring s where
+class (Eq s) => Semiring s where
   zero, one    :: s
   (.+.), (.*.) :: s -> s -> s
-
--- | Auxiliary function to convert Booleans to an arbitrary semiring.
--- 
-fromBool :: Semiring s => Bool -> s
-fromBool False = zero
-fromBool True  = one
-
-instance Semiring Bool where
-  zero = False; one = True; (.+.) = (||); (.*.) = (&&)
-
--- |
--- Wrapper for numeric types.
--- 
--- Every numeric type that satisfies the semiring laws (as all
--- predefined numeric types do) is a semiring.
--- 
-newtype Numeric a = Numeric { getNumeric :: a }
- deriving (Eq,Num)
-
-instance Show a => Show (Numeric a) where
-  show = show . getNumeric
-
-instance Num a => Semiring (Numeric a) where
-  zero = 0; one = 1; (.+.) = (+); (.*.) = (*)
